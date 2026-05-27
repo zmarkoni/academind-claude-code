@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { authClient } from "@/lib/auth-client";
 
@@ -10,7 +9,6 @@ interface AuthFormProps {
 }
 
 export function AuthForm({ isSignUp }: AuthFormProps) {
-  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -38,7 +36,9 @@ export function AuthForm({ isSignUp }: AuthFormProps) {
         return;
       }
 
-      router.push("/dashboard");
+      // Hard navigation clears Next.js's client-side router cache so the
+      // root layout re-fetches its session and renders the logout button.
+      window.location.assign("/dashboard");
     });
   }
 
@@ -48,12 +48,12 @@ export function AuthForm({ isSignUp }: AuthFormProps) {
   return (
     <main className="min-h-svh flex items-center justify-center bg-background px-4">
       <section className="w-full max-w-sm rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-8 shadow-sm">
-        <header className="mb-8 text-center">
+        <div className="mb-8 text-center">
           <h1 className="text-2xl font-bold tracking-tight text-foreground">NoteApp</h1>
-          <h2 className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+          <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
             {isSignUp ? "Create an account" : "Sign in to your account"}
-          </h2>
-        </header>
+          </p>
+        </div>
 
         <form onSubmit={handleSubmit} noValidate className="space-y-4">
           <div className="space-y-1.5">

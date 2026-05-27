@@ -1,0 +1,158 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: auth.spec.ts >> Authenticated access >> logout button is on the LEFT side of the header (before the logo)
+- Location: tests/auth.spec.ts:109:7
+
+# Error details
+
+```
+Error: expect(received).toBeLessThan(expected)
+
+Expected: < 144
+Received:   1034.65625
+```
+
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - navigation "Main navigation" [ref=e3]:
+      - link "NextNotes" [ref=e4] [cursor=pointer]:
+        - /url: /dashboard
+      - generic [ref=e5]:
+        - button "Sign out" [ref=e6]
+        - button "Toggle theme" [ref=e7]:
+          - img [ref=e8]
+  - main [ref=e14]:
+    - generic [ref=e15]:
+      - heading "My Notes" [level=1] [ref=e16]
+      - link "New Note" [ref=e17] [cursor=pointer]:
+        - /url: /notes/new
+    - paragraph [ref=e18]: No notes yet.
+  - button "Open Next.js Dev Tools" [ref=e24] [cursor=pointer]:
+    - img [ref=e25]
+  - alert [ref=e28]
+```
+
+# Test source
+
+```ts
+  22  |     data: { email: TEST_EMAIL, password: TEST_PASSWORD },
+  23  |   });
+  24  |   expect(res.ok(), `sign-in failed: ${res.status()}`).toBeTruthy();
+  25  | }
+  26  | 
+  27  | // ---------------------------------------------------------------------------
+  28  | // Dark mode enforcement
+  29  | // ---------------------------------------------------------------------------
+  30  | 
+  31  | test.describe("Dark mode", () => {
+  32  |   test("html element carries the dark class on every page", async ({ page }) => {
+  33  |     await page.goto("/authenticate");
+  34  |     const cls = await page.locator("html").getAttribute("class");
+  35  |     expect(cls).toContain("dark");
+  36  |   });
+  37  | 
+  38  |   test("body background is dark (not white)", async ({ page }) => {
+  39  |     await page.goto("/authenticate");
+  40  |     const bg = await page.evaluate(() =>
+  41  |       window.getComputedStyle(document.body).backgroundColor
+  42  |     );
+  43  |     // background is --background: #09090b → rgb(9, 9, 11) in dark mode
+  44  |     expect(bg).not.toBe("rgb(255, 255, 255)");
+  45  |   });
+  46  | });
+  47  | 
+  48  | // ---------------------------------------------------------------------------
+  49  | // Unauthenticated access
+  50  | // ---------------------------------------------------------------------------
+  51  | 
+  52  | test.describe("Unauthenticated access", () => {
+  53  |   test("GET /dashboard redirects to /authenticate", async ({ page }) => {
+  54  |     await page.goto("/dashboard");
+  55  |     await expect(page).toHaveURL(/\/authenticate/);
+  56  |   });
+  57  | 
+  58  |   test("GET /notes/:id redirects to /authenticate", async ({ page }) => {
+  59  |     await page.goto("/notes/non-existent-note");
+  60  |     await expect(page).toHaveURL(/\/authenticate/);
+  61  |   });
+  62  | 
+  63  |   test("GET /notes/new redirects to /authenticate", async ({ page }) => {
+  64  |     await page.goto("/notes/new");
+  65  |     await expect(page).toHaveURL(/\/authenticate/);
+  66  |   });
+  67  | 
+  68  |   test("header is present on the /authenticate page", async ({ page }) => {
+  69  |     await page.goto("/authenticate");
+  70  |     await expect(page.locator("header")).toBeVisible();
+  71  |   });
+  72  | 
+  73  |   test("logout button is NOT rendered when unauthenticated", async ({ page }) => {
+  74  |     await page.goto("/authenticate");
+  75  |     await expect(
+  76  |       page.getByRole("button", { name: /sign out/i })
+  77  |     ).not.toBeVisible();
+  78  |   });
+  79  | });
+  80  | 
+  81  | // ---------------------------------------------------------------------------
+  82  | // Authenticated access
+  83  | // ---------------------------------------------------------------------------
+  84  | 
+  85  | test.describe("Authenticated access", () => {
+  86  |   test.beforeEach(signIn);
+  87  | 
+  88  |   test("authenticated user can access /dashboard without redirect", async ({ page }) => {
+  89  |     await page.goto("/dashboard");
+  90  |     await expect(page).toHaveURL("http://localhost:3000/dashboard");
+  91  |   });
+  92  | 
+  93  |   test("header is present on /dashboard", async ({ page }) => {
+  94  |     await page.goto("/dashboard");
+  95  |     await expect(page.locator("header")).toBeVisible();
+  96  |   });
+  97  | 
+  98  |   test("header height is 60px", async ({ page }) => {
+  99  |     await page.goto("/dashboard");
+  100 |     const height = await page.locator("header").evaluate((el) => el.clientHeight);
+  101 |     expect(height).toBe(60);
+  102 |   });
+  103 | 
+  104 |   test("logout button is rendered when authenticated", async ({ page }) => {
+  105 |     await page.goto("/dashboard");
+  106 |     await expect(page.getByRole("button", { name: /sign out/i })).toBeVisible();
+  107 |   });
+  108 | 
+  109 |   test("logout button is on the LEFT side of the header (before the logo)", async ({ page }) => {
+  110 |     await page.goto("/dashboard");
+  111 | 
+  112 |     const logoutButton = page.getByRole("button", { name: /sign out/i });
+  113 |     const logoLink = page.getByRole("link", { name: "NextNotes" });
+  114 | 
+  115 |     const logoutBox = await logoutButton.boundingBox();
+  116 |     const logoBox = await logoLink.boundingBox();
+  117 | 
+  118 |     expect(logoutBox, "logout button bounding box should exist").not.toBeNull();
+  119 |     expect(logoBox, "logo link bounding box should exist").not.toBeNull();
+  120 | 
+  121 |     // The left edge of the logout button must be to the left of the logo's left edge
+> 122 |     expect(logoutBox!.x).toBeLessThan(logoBox!.x);
+      |                          ^ Error: expect(received).toBeLessThan(expected)
+  123 |   });
+  124 | 
+  125 |   test("clicking logout redirects to /authenticate", async ({ page }) => {
+  126 |     await page.goto("/dashboard");
+  127 |     await page.getByRole("button", { name: /sign out/i }).click();
+  128 |     await expect(page).toHaveURL(/\/authenticate/);
+  129 |   });
+  130 | });
+  131 | 
+```

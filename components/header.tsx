@@ -12,19 +12,26 @@ interface HeaderProps {
 
 export function Header({ user }: HeaderProps) {
   return (
-    <header className="h-[61px] bg-zinc-950 border-b border-zinc-800">
+    <header className="h-[60px] bg-zinc-950 border-b border-zinc-800">
       <nav
         aria-label="Main navigation"
-        className="mx-auto max-w-5xl w-full h-full px-4 flex items-center justify-between"
+        className="mx-auto max-w-7xl w-full h-full px-4 sm:px-6 flex items-center justify-between"
       >
+        {/* Left: Logout button (only when authenticated) */}
+        <div className="w-24">
+          {user && <LogoutButton />}
+        </div>
+
+        {/* Center: Logo */}
         <Link
           href="/dashboard"
-          className="text-base font-bold tracking-tight text-zinc-100 hover:text-white transition-colors"
+          className="flex-1 text-center text-base font-bold tracking-tight text-zinc-100 hover:text-white transition-colors"
         >
           NextNotes
         </Link>
-        <div className="flex items-center gap-5">
-          {user && <LogoutButton />}
+
+        {/* Right: Theme toggle */}
+        <div className="w-24 flex justify-end">
           <ThemeToggle />
         </div>
       </nav>

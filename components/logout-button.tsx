@@ -10,9 +10,13 @@ export function LogoutButton() {
 
   function handleLogout() {
     startTransition(async () => {
-      await signOutAction();
-      router.refresh();
-      router.push("/authenticate");
+      try {
+        await signOutAction();
+        router.refresh();
+        router.push("/authenticate");
+      } catch (err) {
+        console.error("Logout failed:", err);
+      }
     });
   }
 
@@ -21,6 +25,7 @@ export function LogoutButton() {
       onClick={handleLogout}
       disabled={isPending}
       className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors disabled:opacity-50"
+      aria-label="Sign out"
     >
       {isPending ? "Signing out…" : "Sign out"}
     </button>

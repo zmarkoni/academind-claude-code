@@ -93,5 +93,10 @@ export function get<T>(sql: string, params: SQLParam[] = []): T | undefined {
 }
 
 export function run(sql: string, params: SQLParam[] = []): void {
-  getDb().prepare(sql).run(...params);
+  try {
+    getDb().prepare(sql).run(...params);
+  } catch (error) {
+    console.error("Database error:", error);
+    throw new Error("Database operation failed");
+  }
 }

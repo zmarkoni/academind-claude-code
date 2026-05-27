@@ -6,10 +6,16 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: [["html"], ["json", { outputFile: "playwright-report/report.json" }]],
+  reporter: [
+    ["html"],
+    ["json", { outputFile: "playwright-report/report.json" }],
+    ["junit", { outputFile: "playwright-report/results.xml" }],
+  ],
   use: {
     baseURL: "http://localhost:3000",
     trace: "on-first-retry",
+    screenshot: "only-on-failure",
+    video: "retain-on-failure",
   },
   projects: [
     {
@@ -21,5 +27,7 @@ export default defineConfig({
     command: "bun run dev",
     url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
+    timeout: 120000,
   },
+  timeout: 30000,
 });

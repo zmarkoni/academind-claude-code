@@ -4,7 +4,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 We're building the app descriobed in @SPEC.md. Read that file foe general architectual tasks or to double-check the exact database structure, tech tack or application architecture.
 
-Keep your replies extremly concise and focus on conveying the key information. Avoid unnecessary explanations or details. o unecessary stuff, no long code snippets. If you need to ask for clarification, do so in a single sentence.
+Keep your replies extremly concise and focus on conveying the key information. No unecessary fluff, no long code snippets.
+
+Whenever working with any third-party library or something similar, you MUST look up the official documentation to ensure that you're working with up-to-date information.
+Use the DocsExplorer subagent for efficient documentation lookup.
 
 ## Commands
 
@@ -37,3 +40,7 @@ This is a **Next.js 16 App Router** project. All routes live under `app/` using 
 **Path alias:** `@/` maps to the project root (e.g. `@/app/...`, `@/lib/...`).
 
 **TypeScript** is strict mode. The `bun.lock` file is the source of truth for dependency versions.
+
+## Testing in Browser
+
+Before testing any routes, always check if the local server is running (`curl -s http://localhost:3000`). If it's not up, stop and ask the user to start it with `bun run dev`.

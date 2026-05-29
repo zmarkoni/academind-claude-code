@@ -11,7 +11,7 @@ import {
 
 export async function updateNote(
   noteId: string,
-  data: { title?: string; contentJson?: string }
+  data: { title?: string; contentJson?: string },
 ) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) redirect("/authenticate");

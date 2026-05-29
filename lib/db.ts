@@ -2,7 +2,14 @@ import { Database } from "bun:sqlite";
 import { mkdirSync } from "fs";
 import { dirname } from "path";
 
-type SQLParam = string | bigint | number | boolean | null | Uint8Array | Uint8ClampedArray;
+type SQLParam =
+  | string
+  | bigint
+  | number
+  | boolean
+  | null
+  | Uint8Array
+  | Uint8ClampedArray;
 
 const DB_PATH = process.env.DB_PATH ?? "data/app.db";
 
@@ -80,21 +87,29 @@ function initSchema(db: Database) {
   )`);
 
   db.run(`CREATE INDEX IF NOT EXISTS idx_notes_user_id ON notes(user_id)`);
-  db.run(`CREATE INDEX IF NOT EXISTS idx_notes_public_slug ON notes(public_slug)`);
+  db.run(
+    `CREATE INDEX IF NOT EXISTS idx_notes_public_slug ON notes(public_slug)`,
+  );
   db.run(`CREATE INDEX IF NOT EXISTS idx_notes_is_public ON notes(is_public)`);
 }
 
 export function query<T>(sql: string, params: SQLParam[] = []): T[] {
-  return getDb().prepare(sql).all(...params) as T[];
+  return getDb()
+    .prepare(sql)
+    .all(...params) as T[];
 }
 
 export function get<T>(sql: string, params: SQLParam[] = []): T | undefined {
-  return getDb().prepare(sql).get(...params) as T | undefined;
+  return getDb()
+    .prepare(sql)
+    .get(...params) as T | undefined;
 }
 
 export function run(sql: string, params: SQLParam[] = []): void {
   try {
-    getDb().prepare(sql).run(...params);
+    getDb()
+      .prepare(sql)
+      .run(...params);
   } catch (error) {
     console.error("Database error:", error);
     throw new Error("Database operation failed");

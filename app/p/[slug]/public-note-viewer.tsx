@@ -32,7 +32,9 @@ export function PublicNoteViewer({ note }: PublicNoteViewerProps) {
   return (
     <main className="mx-auto max-w-4xl px-4 py-10">
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-foreground mb-2">{note.title}</h1>
+        <h1 className="text-4xl font-bold text-foreground mb-2">
+          {note.title}
+        </h1>
         <p className="text-sm text-zinc-500 dark:text-zinc-400">
           Published {new Date(note.created_at).toLocaleString()}
         </p>

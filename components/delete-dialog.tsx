@@ -25,7 +25,9 @@ export function DeleteDialog({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="rounded-lg bg-white dark:bg-zinc-900 p-6 shadow-lg max-w-sm mx-4">
         <h2 className="text-lg font-semibold text-foreground mb-2">{title}</h2>
-        <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-6">{message}</p>
+        <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-6">
+          {message}
+        </p>
         <div className="flex gap-3 justify-end">
           <button
             onClick={onCancel}

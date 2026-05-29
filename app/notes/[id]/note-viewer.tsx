@@ -55,7 +55,9 @@ export function NoteViewer({ note }: NoteViewerProps) {
     <main className="mx-auto max-w-4xl px-4 py-10">
       <div className="flex items-center justify-between mb-8">
         <div className="flex-1">
-          <h1 className="text-4xl font-bold text-foreground mb-1">{note.title}</h1>
+          <h1 className="text-4xl font-bold text-foreground mb-1">
+            {note.title}
+          </h1>
           <p className="text-sm text-zinc-500 dark:text-zinc-400">
             Last updated: {new Date(note.updated_at).toLocaleString()}
           </p>
@@ -94,7 +96,8 @@ export function NoteViewer({ note }: NoteViewerProps) {
             rel="noopener noreferrer"
             className="text-sm text-blue-600 dark:text-blue-400 hover:underline break-all"
           >
-            {typeof window !== "undefined" ? window.location.origin : ""}/p/{note.public_slug}
+            {typeof window !== "undefined" ? window.location.origin : ""}/p/
+            {note.public_slug}
           </a>
         </div>
       )}

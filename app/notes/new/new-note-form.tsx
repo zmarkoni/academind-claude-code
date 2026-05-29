@@ -65,7 +65,10 @@ export function NewNoteForm() {
           <p id="content-label" className="text-sm font-medium text-foreground">
             Content
           </p>
-          <div aria-labelledby="content-label" className="rounded-lg border border-slate-400 dark:border-slate-600 overflow-hidden focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent">
+          <div
+            aria-labelledby="content-label"
+            className="rounded-lg border border-slate-400 dark:border-slate-600 overflow-hidden focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent"
+          >
             <EditorToolbar editor={editor} />
             <div
               onClick={() => editor?.chain().focus().run()}
@@ -77,7 +80,11 @@ export function NewNoteForm() {
               />
             </div>
           </div>
-          <input type="hidden" name="contentJson" defaultValue='{"type":"doc","content":[]}' />
+          <input
+            type="hidden"
+            name="contentJson"
+            defaultValue='{"type":"doc","content":[]}'
+          />
         </div>
 
         {error && (

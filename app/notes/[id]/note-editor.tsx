@@ -70,9 +70,10 @@ export function NoteEditor({ note }: NoteEditorProps) {
     }
   };
 
-  const publicUrl = note.is_public && note.public_slug
-    ? `${typeof window !== "undefined" ? window.location.origin : ""}/p/${note.public_slug}`
-    : null;
+  const publicUrl =
+    note.is_public && note.public_slug
+      ? `${typeof window !== "undefined" ? window.location.origin : ""}/p/${note.public_slug}`
+      : null;
 
   const handleCopyUrl = () => {
     if (publicUrl) {
@@ -133,7 +134,11 @@ export function NoteEditor({ note }: NoteEditorProps) {
                 : "bg-zinc-100 dark:bg-zinc-800 text-foreground hover:bg-zinc-200 dark:hover:bg-zinc-700"
             }`}
           >
-            {isSharing ? "Updating…" : note.is_public ? "Make private" : "Share"}
+            {isSharing
+              ? "Updating…"
+              : note.is_public
+                ? "Make private"
+                : "Share"}
           </button>
         </div>
 

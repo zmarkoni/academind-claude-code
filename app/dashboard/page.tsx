@@ -25,7 +25,10 @@ export default async function DashboardPage() {
       {notes.length === 0 ? (
         <p className="text-sm text-zinc-500 dark:text-zinc-400">
           No notes yet.{" "}
-          <Link href="/notes/new" className="text-zinc-700 dark:text-zinc-300 underline hover:text-zinc-900 dark:hover:text-zinc-100">
+          <Link
+            href="/notes/new"
+            className="text-zinc-700 dark:text-zinc-300 underline hover:text-zinc-900 dark:hover:text-zinc-100"
+          >
             Create your first note
           </Link>
         </p>

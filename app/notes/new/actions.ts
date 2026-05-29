@@ -9,7 +9,7 @@ type ActionState = { error: string } | null;
 
 export async function createNote(
   _prev: ActionState,
-  formData: FormData
+  formData: FormData,
 ): Promise<ActionState> {
   try {
     const session = await auth.api.getSession({ headers: await headers() });

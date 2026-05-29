@@ -27,8 +27,5 @@ export function isValidPassword(password: string): boolean {
 
 export function generatePublicSlug(): string {
   // Generate a short, URL-safe slug from a random string
-  return Math.random()
-    .toString(36)
-    .substring(2, 10)
-    .toUpperCase();
+  return Math.random().toString(36).substring(2, 10).toUpperCase();
 }

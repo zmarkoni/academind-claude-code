@@ -7,6 +7,9 @@
     "build": "bun run --bun next build",
     "start": "bun run --bun next start",
     "lint": "eslint",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
     "test:e2e": "playwright test"
   },
   "dependencies": {

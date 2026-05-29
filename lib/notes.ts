@@ -1,5 +1,6 @@
 import { query, get, run } from "@/lib/db";
 import { randomUUID } from "crypto";
+import { sanitizeTitle, validateContentJson } from "@/lib/utils";
 
 export type Note = {
   id: string;
@@ -11,22 +12,6 @@ export type Note = {
   created_at: string;
   updated_at: string;
 };
-
-function sanitizeTitle(title: string): string {
-  return title.trim().slice(0, 255).replace(/[<>]/g, "");
-}
-
-function validateContentJson(contentJson: string): string {
-  try {
-    const parsed = JSON.parse(contentJson);
-    if (!parsed.type || typeof parsed.type !== "string") {
-      throw new Error("Invalid document structure");
-    }
-    return JSON.stringify(parsed);
-  } catch {
-    return '{"type":"doc","content":[]}';
-  }
-}
 
 export function createNote(
   userId: string,

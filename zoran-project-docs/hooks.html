@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hooks Configuration - NextNotes</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        min-height: 100vh;
+        padding: 2rem;
+      }
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+      }
+      header {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        padding: 3rem 2rem;
+        text-align: center;
+      }
+      header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+      }
+      header p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+      }
+      main {
+        padding: 3rem 2rem;
+      }
+      section {
+        margin-bottom: 3rem;
+      }
+      h2 {
+        color: #f5576c;
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+        border-left: 4px solid #f5576c;
+        padding-left: 1rem;
+      }
+      h3 {
+        color: #f093fb;
+        font-size: 1.3rem;
+        margin-top: 1.5rem;
+        margin-bottom: 0.8rem;
+      }
+      p {
+        margin-bottom: 1rem;
+        color: #555;
+      }
+      code {
+        background: #f5f5f5;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: "Monaco", "Menlo", monospace;
+        color: #d63384;
+      }
+      pre {
+        background: #f5f5f5;
+        padding: 1rem;
+        border-radius: 8px;
+        overflow-x: auto;
+        margin: 1rem 0;
+        border-left: 4px solid #f5576c;
+      }
+      pre code {
+        color: #333;
+        padding: 0;
+      }
+      ul,
+      ol {
+        margin-left: 2rem;
+        margin-bottom: 1rem;
+      }
+      li {
+        margin-bottom: 0.5rem;
+      }
+      .hook-box {
+        background: #fff9e6;
+        border-left: 4px solid #f5576c;
+        padding: 1.5rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+      }
+      .hook-box strong {
+        color: #f5576c;
+      }
+      .flow {
+        background: #f0f4ff;
+        border-left: 4px solid #f093fb;
+        padding: 1.5rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+        font-family: "Monaco", monospace;
+        font-size: 0.95rem;
+      }
+      a {
+        color: #f5576c;
+        text-decoration: none;
+        font-weight: 500;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      .status {
+        background: #f3e5f5;
+        border-left: 4px solid #f093fb;
+        padding: 1rem;
+        border-radius: 4px;
+        margin: 1rem 0;
+      }
+      .status strong {
+        color: #c2185b;
+      }
+      .comparison {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin: 1rem 0;
+      }
+      .comparison > div {
+        padding: 1rem;
+        border-radius: 4px;
+      }
+      .before {
+        background: #ffebee;
+        border-left: 4px solid #c62828;
+      }
+      .after {
+        background: #e8f5e9;
+        border-left: 4px solid #2e7d32;
+      }
+      .before strong,
+      .after strong {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 0.75rem;
+        border-bottom: 1px solid #ddd;
+      }
+      th {
+        background: #f5f5f5;
+        font-weight: 600;
+        color: #333;
+      }
+      tr:hover {
+        background: #f9f9f9;
+      }
+      .documentation-link {
+        display: inline-block;
+        background: #f5576c;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        margin: 0.5rem 0.5rem 0.5rem 0;
+      }
+      .documentation-link:hover {
+        background: #f093fb;
+        text-decoration: none;
+      }
+      .command {
+        background: #263238;
+        color: #aed581;
+        padding: 1rem;
+        border-radius: 4px;
+        margin: 1rem 0;
+        font-family: "Monaco", monospace;
+        overflow-x: auto;
+      }
+      footer {
+        background: #f5f5f5;
+        padding: 2rem;
+        text-align: center;
+        color: #999;
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>🎣 Hooks Configuration</h1>
+        <p>Claude Code PostToolUse Hooks in NextNotes</p>
+      </header>
+
+      <main>
+        <!-- Overview Section -->
+        <section>
+          <h2>Overview</h2>
+          <p>
+            Hooks are automated actions that run in response to specific events
+            in Claude Code. In NextNotes, we use
+            <strong>PostToolUse hooks</strong> to automatically format and lint
+            code after every edit.
+          </p>
+          <div class="status">
+            <strong>✓ Status:</strong> PostToolUse hooks are configured and
+            active. They run Prettier (formatter) and ESLint (linter) on every
+            file change.
+          </div>
+        </section>
+
+        <!-- What Are Hooks -->
+        <section>
+          <h2>What Are Hooks?</h2>
+          <p>
+            Hooks are rules defined in <code>.claude/settings.json</code> that
+            automatically execute shell commands in response to Claude Code
+            events.
+          </p>
+          <p><strong>Hook Types:</strong></p>
+          <ul>
+            <li>
+              <code>PostToolUse</code> - Runs after a tool is executed (Edit,
+              Write, Bash, etc.)
+            </li>
+          </ul>
+          <p>
+            They help maintain code quality without requiring manual
+            intervention.
+          </p>
+        </section>
+
+        <!-- Current Setup -->
+        <section>
+          <h2>Current Hooks Setup in NextNotes</h2>
+          <p><strong>File:</strong> <code>.claude/settings.json</code></p>
+          <h3>PostToolUse Hook Configuration</h3>
+          <pre><code>{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"$CLAUDE_PROJECT_DIR\" && npx prettier --write \"$CLAUDE_CHANGED_FILES\" 2>/dev/null && eslint --fix \"$CLAUDE_CHANGED_FILES\" 2>/dev/null || true"
+          }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+
+          <div class="hook-box">
+            <strong>Matcher:</strong> <code>Edit|Write</code> - Hook runs after
+            Edit or Write tool use<br />
+            <strong>Command:</strong> Runs Prettier then ESLint on changed
+            files<br />
+            <strong>Error Handling:</strong> <code>|| true</code> prevents hook
+            failure from blocking operations
+          </div>
+        </section>
+
+        <!-- Hook Execution Flow -->
+        <section>
+          <h2>Hook Execution Flow</h2>
+
+          <h3>When You Edit a File</h3>
+          <div class="flow">
+            1. You use Edit tool on a file<br />
+            2. Edit completes successfully<br />
+            3. PostToolUse hook triggers<br />
+            4. Prettier formats the file<br />
+            5. ESLint fixes linting issues<br />
+            6. File is updated with formatting/linting changes<br />
+            7. You see the updated file
+          </div>
+
+          <h3>Example: Adding h3 Element</h3>
+          <pre><code>// Before hook runs:
+      &lt;h2&gt;Title&lt;/h2&gt;
+              &lt;h3&gt;TEST&lt;/h3&gt;  // Bad indentation
+
+// After Prettier:
+      &lt;h2&gt;Title&lt;/h2&gt;
+      &lt;h3&gt;TEST&lt;/h3&gt;  // Fixed indentation
+
+// After ESLint:
+      &lt;h2 className="sr-only"&gt;Title&lt;/h2&gt;
+      &lt;h3&gt;TEST&lt;/h3&gt;  // Fixed class name and other issues</code></pre>
+        </section>
+
+        <!-- Tools Used -->
+        <section>
+          <h2>Tools Executed by Hooks</h2>
+
+          <h3>1. Prettier (Code Formatter)</h3>
+          <div class="hook-box">
+            <strong>What it does:</strong> Automatically formats code<br />
+            <strong>Formats:</strong> JavaScript, TypeScript, JSX, CSS, JSON,
+            Markdown, YAML<br />
+            <strong>Focus:</strong> Whitespace, indentation, line length<br />
+            <strong>Command:</strong>
+            <code>npx prettier --write "$CLAUDE_CHANGED_FILES"</code>
+          </div>
+
+          <h4>What Prettier Fixes:</h4>
+          <ul>
+            <li>Indentation (tabs vs spaces)</li>
+            <li>Line length and wrapping</li>
+            <li>Quote styles (' vs ")</li>
+            <li>Semicolons</li>
+            <li>Trailing commas</li>
+            <li>JSX formatting</li>
+          </ul>
+
+          <div class="documentation-link">
+            <a href="https://prettier.io/" target="_blank"
+              >Prettier Official →</a
+            >
+          </div>
+
+          <h3>2. ESLint (Code Linter)</h3>
+          <div class="hook-box">
+            <strong>What it does:</strong> Identifies and fixes code quality
+            issues<br />
+            <strong>Checks:</strong> JavaScript/TypeScript syntax, best
+            practices, accessibility<br />
+            <strong>Fix Flag:</strong> <code>--fix</code> auto-corrects fixable
+            issues<br />
+            <strong>Command:</strong>
+            <code>eslint --fix "$CLAUDE_CHANGED_FILES"</code>
+          </div>
+
+          <h4>What ESLint Fixes:</h4>
+          <ul>
+            <li>Unused variables</li>
+            <li>Incorrect imports</li>
+            <li>Accessibility violations (via jsx-a11y plugin)</li>
+            <li>React hooks rules</li>
+            <li>Next.js specific patterns</li>
+            <li>TypeScript type issues</li>
+          </ul>
+
+          <div class="documentation-link">
+            <a href="https://eslint.org/" target="_blank">ESLint Official →</a>
+          </div>
+
+          <h4>ESLint Plugins Active:</h4>
+          <ul>
+            <li><code>eslint-config-next</code> - Next.js best practices</li>
+            <li><code>eslint-plugin-jsx-a11y</code> - Accessibility checks</li>
+          </ul>
+        </section>
+
+        <!-- Variable Reference -->
+        <section>
+          <h2>Hook Variables Reference</h2>
+          <p>Special variables available in hook commands:</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Variable</th>
+                <th>Description</th>
+                <th>Example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>$CLAUDE_PROJECT_DIR</code></td>
+                <td>Root directory of the project</td>
+                <td>/Users/zoran/Documents/AI/academind-claude-code</td>
+              </tr>
+              <tr>
+                <td><code>$CLAUDE_CHANGED_FILES</code></td>
+                <td>Space-separated list of files changed by the tool</td>
+                <td>components/header.tsx tests/e2e/auth.spec.ts</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- Workflow Benefits -->
+        <section>
+          <h2>Benefits of This Setup</h2>
+
+          <div class="comparison">
+            <div class="before">
+              <strong>❌ Without Hooks</strong>
+              1. Edit file<br />
+              2. Remember to run prettier<br />
+              3. Remember to run eslint --fix<br />
+              4. Remember to fix warnings<br />
+              5. Inconsistent code style<br />
+              6. Potential commits with linting errors
+            </div>
+            <div class="after">
+              <strong>✅ With Hooks</strong>
+              1. Edit file<br />
+              2. Prettier auto-formats<br />
+              3. ESLint auto-fixes<br />
+              4. Code is always clean<br />
+              5. Consistent code style<br />
+              6. All files pass linting
+            </div>
+          </div>
+
+          <h3>Key Advantages:</h3>
+          <ul>
+            <li>
+              <strong>Saves Time:</strong> No manual formatting/linting steps
+            </li>
+            <li><strong>Consistency:</strong> All code follows same rules</li>
+            <li>
+              <strong>Quality:</strong> Catches issues immediately during
+              development
+            </li>
+            <li>
+              <strong>Team Alignment:</strong> Everyone's code looks the same
+            </li>
+            <li>
+              <strong>Git Cleaner:</strong> No formatting commits clutter
+              history
+            </li>
+            <li>
+              <strong>Accessibility:</strong> JSX a11y rules run automatically
+            </li>
+          </ul>
+        </section>
+
+        <!-- Manual Commands -->
+        <section>
+          <h2>Manual Commands (Without Hooks)</h2>
+          <p>
+            If hooks don't run or you need manual control, use these commands:
+          </p>
+
+          <h3>Format with Prettier</h3>
+          <div class="command">bun exec prettier --write .</div>
+
+          <h3>Lint and Fix with ESLint</h3>
+          <div class="command">bun run lint --fix</div>
+
+          <h3>Or run through npm/bun</h3>
+          <div class="command">bun run lint</div>
+        </section>
+
+        <!-- Troubleshooting -->
+        <section>
+          <h2>Troubleshooting Hooks</h2>
+
+          <h3>Hook Didn't Run?</h3>
+          <p>
+            <strong>Possible Causes:</strong>
+          </p>
+          <ul>
+            <li>
+              Hook only runs on <code>Edit</code> and <code>Write</code> tools
+            </li>
+            <li>
+              Bash commands don't trigger hooks (by design, to avoid infinite
+              loops)
+            </li>
+            <li>
+              Check <code>.claude/settings.json</code> for configuration issues
+            </li>
+          </ul>
+
+          <h3>Prettier Installation Failed</h3>
+          <p><strong>Solution:</strong> Install Prettier manually with:</p>
+          <div class="command">bun add -d prettier</div>
+
+          <h3>ESLint Not Found</h3>
+          <p>
+            <strong>Solution:</strong> Check that ESLint is installed. Should
+            already be in devDependencies. If not:
+          </p>
+          <div class="command">bun add -d eslint</div>
+
+          <h3>Hook Error Hiding</h3>
+          <p>
+            The hook ends with <code>|| true</code> which silently ignores
+            errors. This prevents tool use from failing if formatting fails. To
+            see errors:
+          </p>
+          <pre><code>bun exec npx prettier --write "components/header.tsx"
+bun run lint --fix</code></pre>
+        </section>
+
+        <!-- Settings Reference -->
+        <section>
+          <h2>Full Settings Configuration</h2>
+          <p>
+            <strong>File Path:</strong>
+            <code>.claude/settings.json</code>
+          </p>
+          <pre><code>{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"$CLAUDE_PROJECT_DIR\" && npx prettier --write \"$CLAUDE_CHANGED_FILES\" 2>/dev/null && eslint --fix \"$CLAUDE_CHANGED_FILES\" 2>/dev/null || true"
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "typescript-lsp@claude-plugins-official": true
+  }
+}</code></pre>
+
+          <h3>Explanation:</h3>
+          <ul>
+            <li>
+              <code>"matcher": "Edit|Write"</code> - Hook runs on both Edit and
+              Write tools
+            </li>
+            <li><code>"type": "command"</code> - Execute shell command</li>
+            <li>
+              <code>cd "$CLAUDE_PROJECT_DIR"</code> - Change to project root
+            </li>
+            <li>
+              <code>npx prettier --write</code> - Format all changed files
+            </li>
+            <li><code>2>/dev/null</code> - Suppress error messages</li>
+            <li><code>|| true</code> - Don't fail hook if commands fail</li>
+          </ul>
+        </section>
+
+        <!-- Adding More Hooks -->
+        <section>
+          <h2>Adding Additional Hooks</h2>
+
+          <h3>Example: Run Tests After Changes</h3>
+          <pre><code>{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"$CLAUDE_PROJECT_DIR\" && bun run test 2>/dev/null || true"
+          }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+
+          <h3>Example: Custom Linter</h3>
+          <pre><code>{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"$CLAUDE_PROJECT_DIR\" && bun run lint:strict 2>/dev/null || true"
+          }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+        </section>
+
+        <!-- Resources -->
+        <section>
+          <h2>Learning Resources</h2>
+          <ul>
+            <li>
+              <a href="https://claude.ai/code">Claude Code Official Site</a>
+            </li>
+            <li>
+              <a href="https://prettier.io/docs/">Prettier Documentation</a>
+            </li>
+            <li>
+              <a href="https://eslint.org/docs/latest/">ESLint Documentation</a>
+            </li>
+            <li>
+              <a href="https://nextjs.org/docs">Next.js Documentation</a>
+            </li>
+          </ul>
+        </section>
+      </main>
+
+      <footer>
+        <p>NextNotes Hooks Configuration Documentation | May 29, 2026</p>
+        <p>Configuration file: .claude/settings.json</p>
+      </footer>
+    </div>
+  </body>
+</html>

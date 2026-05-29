@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Accessibility Setup - NextNotes</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 2rem;
+      }
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+      }
+      header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 3rem 2rem;
+        text-align: center;
+      }
+      header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+      }
+      header p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+      }
+      main {
+        padding: 3rem 2rem;
+      }
+      section {
+        margin-bottom: 3rem;
+      }
+      h2 {
+        color: #667eea;
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+        border-left: 4px solid #667eea;
+        padding-left: 1rem;
+      }
+      h3 {
+        color: #764ba2;
+        font-size: 1.3rem;
+        margin-top: 1.5rem;
+        margin-bottom: 0.8rem;
+      }
+      p {
+        margin-bottom: 1rem;
+        color: #555;
+      }
+      code {
+        background: #f5f5f5;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: "Monaco", "Menlo", monospace;
+        color: #d63384;
+      }
+      pre {
+        background: #f5f5f5;
+        padding: 1rem;
+        border-radius: 8px;
+        overflow-x: auto;
+        margin: 1rem 0;
+        border-left: 4px solid #667eea;
+      }
+      pre code {
+        color: #333;
+        padding: 0;
+      }
+      ul,
+      ol {
+        margin-left: 2rem;
+        margin-bottom: 1rem;
+      }
+      li {
+        margin-bottom: 0.5rem;
+      }
+      .tool {
+        background: #f0f4ff;
+        border-left: 4px solid #667eea;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+      }
+      .tool strong {
+        color: #667eea;
+      }
+      a {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 500;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      .documentation-link {
+        display: inline-block;
+        background: #667eea;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        margin: 0.5rem 0.5rem 0.5rem 0;
+      }
+      .documentation-link:hover {
+        background: #764ba2;
+        text-decoration: none;
+      }
+      .status {
+        background: #e8f5e9;
+        border-left: 4px solid #4caf50;
+        padding: 1rem;
+        border-radius: 4px;
+        margin: 1rem 0;
+      }
+      .status strong {
+        color: #2e7d32;
+      }
+      footer {
+        background: #f5f5f5;
+        padding: 2rem;
+        text-align: center;
+        color: #999;
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>♿ Accessibility Setup</h1>
+        <p>NextNotes Project Accessibility Guidelines & Tools</p>
+      </header>
+
+      <main>
+        <!-- Overview Section -->
+        <section>
+          <h2>Overview</h2>
+          <p>
+            NextNotes implements comprehensive accessibility (a11y) testing and
+            enforcement to ensure all users can navigate and use the
+            application, regardless of their abilities. This document outlines
+            the tools, setup, and best practices in place.
+          </p>
+          <div class="status">
+            <strong>✓ Status:</strong> ESLint accessibility plugin installed and
+            configured. Axe DevTools integration for Playwright e2e tests ready.
+            Heading hierarchy validation implemented.
+          </div>
+        </section>
+
+        <!-- Tools Installed Section -->
+        <section>
+          <h2>Tools Installed & Configured</h2>
+
+          <h3>1. eslint-plugin-jsx-a11y</h3>
+          <div class="tool">
+            <strong>Package:</strong> <code>eslint-plugin-jsx-a11y</code><br />
+            <strong>Purpose:</strong> Lints React/JSX code for accessibility
+            violations during development<br />
+            <strong>Installed:</strong> Yes ✓
+          </div>
+          <p>Automatically catches accessibility issues in your components:</p>
+          <ul>
+            <li>Empty headings and labels</li>
+            <li>Missing alt text on images</li>
+            <li>Missing ARIA roles</li>
+            <li>Interactive elements without proper semantics</li>
+          </ul>
+          <h4>Enabled Rules:</h4>
+          <pre><code>{
+  "jsx-a11y/heading-has-content": "warn"
+}</code></pre>
+          <div class="documentation-link">
+            <a
+              href="https://github.com/jsx-eslint/eslint-plugin-jsx-a11y"
+              target="_blank"
+              >Official Repository →</a
+            >
+          </div>
+          <div class="documentation-link">
+            <a
+              href="https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/tree/HEAD/docs/rules"
+              target="_blank"
+              >Available Rules →</a
+            >
+          </div>
+
+          <h3>2. @axe-core/playwright</h3>
+          <div class="tool">
+            <strong>Package:</strong> <code>@axe-core/playwright</code><br />
+            <strong>Purpose:</strong> Automated accessibility testing in
+            Playwright e2e tests<br />
+            <strong>Installed:</strong> Yes ✓
+          </div>
+          <p>
+            Runs accessibility scans during e2e testing to catch issues before
+            deployment:
+          </p>
+          <ul>
+            <li>WCAG 2.1 compliance checking</li>
+            <li>Heading hierarchy validation</li>
+            <li>Color contrast issues</li>
+            <li>Form accessibility</li>
+            <li>Screen reader compatibility</li>
+          </ul>
+          <h4>Usage in Tests:</h4>
+          <pre><code>import { AxeBuilder } from "@axe-core/playwright";
+
+test("header passes accessibility scan", async ({ page }) => {
+  await page.goto("/authenticate");
+  const results = await new AxeBuilder({ page })
+    .include("header")
+    .analyze();
+  expect(results.violations).toHaveLength(0);
+});</code></pre>
+          <div class="documentation-link">
+            <a
+              href="https://github.com/dequelabs/axe-core-npm/tree/develop/packages/playwright"
+              target="_blank"
+              >Official Repository →</a
+            >
+          </div>
+          <div class="documentation-link">
+            <a href="https://www.deque.com/axe/" target="_blank"
+              >Axe DevTools →</a
+            >
+          </div>
+        </section>
+
+        <!-- Implementation Section -->
+        <section>
+          <h2>Implementation in This Project</h2>
+
+          <h3>ESLint Configuration</h3>
+          <p>File: <code>eslint.config.mjs</code></p>
+          <pre><code>import { defineConfig } from "eslint/config";
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTs from "eslint-config-next/typescript";
+
+const eslintConfig = defineConfig([
+  ...nextVitals,
+  ...nextTs,
+  {
+    rules: {
+      "jsx-a11y/heading-has-content": "warn"
+    }
+  }
+]);</code></pre>
+          <p>
+            This configuration runs automatically on every
+            <code>bun run lint</code> and via the PostToolUse hook.
+          </p>
+
+          <h3>E2E Accessibility Tests</h3>
+          <p>File: <code>tests/e2e/accessibility.spec.ts</code></p>
+          <p>Tests included:</p>
+          <ul>
+            <li>
+              <strong>Axe Scans:</strong> Full page and component-level
+              accessibility audits
+            </li>
+            <li>
+              <strong>Heading Hierarchy:</strong> Validates h1→h2→h3 progression
+              (no skips like h2→h4)
+            </li>
+            <li>
+              <strong>Content Validation:</strong> Ensures all headings have
+              accessible text content
+            </li>
+            <li>
+              <strong>Multi-page Testing:</strong> Checks both authenticated and
+              unauthenticated pages
+            </li>
+          </ul>
+
+          <h4>Run Accessibility Tests:</h4>
+          <pre><code># Run only accessibility tests
+bun run test:e2e tests/e2e/accessibility.spec.ts
+
+# Run all e2e tests (includes accessibility)
+bun run test:e2e</code></pre>
+        </section>
+
+        <!-- Development Workflow Section -->
+        <section>
+          <h2>Development Workflow</h2>
+
+          <h3>During Development</h3>
+          <ol>
+            <li>
+              Edit/create components with proper semantic HTML
+              (<code>&lt;button&gt;</code>, <code>&lt;nav&gt;</code>,
+              <code>&lt;header&gt;</code>, etc.)
+            </li>
+            <li>
+              ESLint plugin automatically warns about accessibility violations
+            </li>
+            <li><code>bun run lint --fix</code> to auto-fix where possible</li>
+          </ol>
+
+          <h3>Before Committing</h3>
+          <ol>
+            <li>
+              Run linter: <code>bun run lint</code> (eslint-plugin-jsx-a11y
+              warnings included)
+            </li>
+            <li>
+              Run e2e tests:
+              <code>bun run test:e2e</code> (accessibility.spec.ts included)
+            </li>
+            <li>Fix any accessibility warnings or test failures</li>
+          </ol>
+
+          <h3>Continuous Integration</h3>
+          <p>
+            Both linting and e2e tests should run in your CI/CD pipeline to
+            prevent accessibility regressions.
+          </p>
+        </section>
+
+        <!-- Best Practices Section -->
+        <section>
+          <h2>Accessibility Best Practices</h2>
+
+          <h3>Semantic HTML</h3>
+          <pre><code><!-- ✓ Good -->
+&lt;header&gt;
+  &lt;nav&gt;...&lt;/nav&gt;
+&lt;/header&gt;
+&lt;main&gt;
+  &lt;article&gt;...&lt;/article&gt;
+&lt;/main&gt;
+
+<!-- ✗ Bad -->
+&lt;div&gt;Navigation&lt;/div&gt;
+&lt;div&gt;Content&lt;/div&gt;</code></pre>
+
+          <h3>Heading Hierarchy</h3>
+          <pre><code><!-- ✓ Good: Sequential progression -->
+&lt;h1&gt;Page Title&lt;/h1&gt;
+&lt;h2&gt;Section&lt;/h2&gt;
+&lt;h3&gt;Subsection&lt;/h3&gt;
+
+<!-- ✗ Bad: Skipped levels -->
+&lt;h1&gt;Page Title&lt;/h1&gt;
+&lt;h3&gt;Subsection&lt;/h3&gt; &lt;!-- Should be h2 --&gt;
+&lt;h4&gt;Sub-subsection&lt;/h4&gt;</code></pre>
+
+          <h3>Images & Alt Text</h3>
+          <pre><code><!-- ✓ Good: Descriptive alt text -->
+&lt;img src="logo.svg" alt="NextNotes application logo" /&gt;
+
+<!-- ✗ Bad: Missing or generic alt -->
+&lt;img src="logo.svg" alt="image" /&gt;
+&lt;img src="logo.svg" /&gt;</code></pre>
+
+          <h3>Form Accessibility</h3>
+          <pre><code><!-- ✓ Good: Proper labels -->
+&lt;label htmlFor="email"&gt;Email&lt;/label&gt;
+&lt;input id="email" type="email" /&gt;
+
+<!-- ✗ Bad: No label connection -->
+&lt;label&gt;Email&lt;/label&gt;
+&lt;input type="email" /&gt;</code></pre>
+
+          <h3>ARIA & Color Contrast</h3>
+          <ul>
+            <li>
+              Use ARIA attributes only when semantic HTML isn't sufficient
+            </li>
+            <li>
+              Maintain 4.5:1 contrast ratio for normal text, 3:1 for large text
+            </li>
+            <li>Don't rely on color alone to convey information</li>
+          </ul>
+        </section>
+
+        <!-- WCAG Standards -->
+        <section>
+          <h2>WCAG 2.1 Compliance</h2>
+          <p>
+            This project aims for <strong>WCAG 2.1 AA</strong> compliance,
+            covering:
+          </p>
+          <ul>
+            <li>
+              <strong>Perceivable:</strong> Information is visible/readable
+            </li>
+            <li>
+              <strong>Operable:</strong> All functionality is keyboard
+              accessible
+            </li>
+            <li>
+              <strong>Understandable:</strong> Content is clear and predictable
+            </li>
+            <li><strong>Robust:</strong> Works with assistive technologies</li>
+          </ul>
+          <div class="documentation-link">
+            <a href="https://www.w3.org/WAI/WCAG21/quickref/" target="_blank"
+              >WCAG 2.1 Quick Reference →</a
+            >
+          </div>
+          <div class="documentation-link">
+            <a href="https://www.w3.org/WAI/test-evaluate/" target="_blank"
+              >WAI Testing & Evaluation →</a
+            >
+          </div>
+        </section>
+
+        <!-- Resources Section -->
+        <section>
+          <h2>Learning Resources</h2>
+          <ul>
+            <li>
+              <a href="https://www.w3.org/WAI/fundamentals/"
+                >W3C Web Accessibility Fundamentals</a
+              >
+            </li>
+            <li>
+              <a href="https://a11y-101.com/">A11y 101 - Accessibility Guide</a>
+            </li>
+            <li>
+              <a href="https://www.deque.com/articles/what-is-semantic-html/"
+                >What is Semantic HTML?</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://developer.mozilla.org/en-US/docs/Web/Accessibility"
+                >MDN Web Accessibility</a
+              >
+            </li>
+            <li>
+              <a href="https://www.nvaccess.org/">NVDA - Screen Reader</a>
+            </li>
+          </ul>
+        </section>
+
+        <!-- Troubleshooting -->
+        <section>
+          <h2>Troubleshooting</h2>
+
+          <h3>ESLint Warning: "heading-has-content"</h3>
+          <p>
+            <strong>Issue:</strong> Your heading element is empty or has no
+            accessible text.
+          </p>
+          <p><strong>Solution:</strong> Ensure all headings have content:</p>
+          <pre><code><!-- ✗ Bad -->
+&lt;h2&gt;&lt;/h2&gt;
+
+<!-- ✓ Good -->
+&lt;h2&gt;Section Title&lt;/h2&gt;</code></pre>
+
+          <h3>Axe Test Failure: Heading Hierarchy</h3>
+          <p>
+            <strong>Issue:</strong> Heading levels skip (e.g., h2 → h4 without
+            h3).
+          </p>
+          <p><strong>Solution:</strong> Follow sequential heading levels:</p>
+          <pre><code><!-- ✗ Bad -->
+&lt;h2&gt;Main&lt;/h2&gt;
+&lt;h4&gt;Sub&lt;/h4&gt; &lt;!-- Missing h3 --&gt;
+
+<!-- ✓ Good -->
+&lt;h2&gt;Main&lt;/h2&gt;
+&lt;h3&gt;Sub&lt;/h3&gt;
+&lt;h4&gt;Sub-sub&lt;/h4&gt;</code></pre>
+
+          <h3>Axe Test Failure: Color Contrast</h3>
+          <p>
+            <strong>Issue:</strong> Text color doesn't have sufficient contrast
+            against background.
+          </p>
+          <p>
+            <strong>Solution:</strong> Use tools like
+            <a href="https://webaim.org/resources/contrastchecker/"
+              >WebAIM Contrast Checker</a
+            >
+            to verify 4.5:1 (normal) or 3:1 (large text) ratio.
+          </p>
+        </section>
+      </main>
+
+      <footer>
+        <p>
+          NextNotes Accessibility Documentation | Last Updated: May 29, 2026
+        </p>
+        <p>
+          For updates, see: eslint.config.mjs, tests/e2e/accessibility.spec.ts
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>

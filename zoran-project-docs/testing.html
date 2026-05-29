@@ -1,0 +1,770 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Testing Strategy - NextNotes</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        min-height: 100vh;
+        padding: 2rem;
+      }
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+      }
+      header {
+        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        color: white;
+        padding: 3rem 2rem;
+        text-align: center;
+      }
+      header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+      }
+      header p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+      }
+      main {
+        padding: 3rem 2rem;
+      }
+      section {
+        margin-bottom: 3rem;
+      }
+      h2 {
+        color: #11998e;
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+        border-left: 4px solid #11998e;
+        padding-left: 1rem;
+      }
+      h3 {
+        color: #38ef7d;
+        font-size: 1.3rem;
+        margin-top: 1.5rem;
+        margin-bottom: 0.8rem;
+      }
+      p {
+        margin-bottom: 1rem;
+        color: #555;
+      }
+      code {
+        background: #f5f5f5;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: "Monaco", "Menlo", monospace;
+        color: #d63384;
+      }
+      pre {
+        background: #f5f5f5;
+        padding: 1rem;
+        border-radius: 8px;
+        overflow-x: auto;
+        margin: 1rem 0;
+        border-left: 4px solid #11998e;
+      }
+      pre code {
+        color: #333;
+        padding: 0;
+      }
+      ul,
+      ol {
+        margin-left: 2rem;
+        margin-bottom: 1rem;
+      }
+      li {
+        margin-bottom: 0.5rem;
+      }
+      .tool-box {
+        background: #f0fffe;
+        border-left: 4px solid #11998e;
+        padding: 1.5rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+      }
+      .tool-box strong {
+        color: #11998e;
+      }
+      .command {
+        background: #263238;
+        color: #aed581;
+        padding: 1rem;
+        border-radius: 4px;
+        margin: 1rem 0;
+        font-family: "Monaco", monospace;
+        overflow-x: auto;
+      }
+      .pyramid {
+        margin: 2rem 0;
+        text-align: center;
+      }
+      .pyramid-level {
+        padding: 1rem;
+        margin: 0.5rem auto;
+        border-radius: 4px;
+        max-width: 600px;
+        font-weight: 500;
+      }
+      .pyramid-e2e {
+        background: #c8e6c9;
+        border-left: 4px solid #2e7d32;
+        width: 150px;
+      }
+      .pyramid-integration {
+        background: #bbdefb;
+        border-left: 4px solid #1565c0;
+        width: 300px;
+      }
+      .pyramid-unit {
+        background: #ffe0b2;
+        border-left: 4px solid #e65100;
+        width: 500px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 0.75rem;
+        border-bottom: 1px solid #ddd;
+      }
+      th {
+        background: #f5f5f5;
+        font-weight: 600;
+        color: #333;
+      }
+      tr:hover {
+        background: #f9f9f9;
+      }
+      .status {
+        background: #e8f5e9;
+        border-left: 4px solid #4caf50;
+        padding: 1rem;
+        border-radius: 4px;
+        margin: 1rem 0;
+      }
+      .status strong {
+        color: #2e7d32;
+      }
+      .documentation-link {
+        display: inline-block;
+        background: #11998e;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        margin: 0.5rem 0.5rem 0.5rem 0;
+      }
+      .documentation-link:hover {
+        background: #38ef7d;
+        color: #333;
+        text-decoration: none;
+      }
+      a {
+        color: #11998e;
+        text-decoration: none;
+        font-weight: 500;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      .flow {
+        background: #f0fffe;
+        border-left: 4px solid #38ef7d;
+        padding: 1.5rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+        font-family: "Monaco", monospace;
+        font-size: 0.95rem;
+      }
+      .comparison {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin: 1rem 0;
+      }
+      .comparison > div {
+        padding: 1rem;
+        border-radius: 4px;
+      }
+      .do {
+        background: #e8f5e9;
+        border-left: 4px solid #2e7d32;
+      }
+      .dont {
+        background: #ffebee;
+        border-left: 4px solid #c62828;
+      }
+      .do strong,
+      .dont strong {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+      }
+      footer {
+        background: #f5f5f5;
+        padding: 2rem;
+        text-align: center;
+        color: #999;
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>🧪 Testing Strategy</h1>
+        <p>NextNotes Comprehensive Testing Guide</p>
+      </header>
+
+      <main>
+        <!-- Overview Section -->
+        <section>
+          <h2>Overview</h2>
+          <p>
+            NextNotes implements a multi-layered testing strategy covering unit
+            tests, integration tests, end-to-end tests, linting, and
+            accessibility testing. This ensures code quality, reliability, and
+            user experience.
+          </p>
+          <div class="status">
+            <strong>✓ Status:</strong> Full testing suite configured with Vitest
+            (unit), Playwright (e2e), ESLint (linting), and Axe (accessibility).
+          </div>
+        </section>
+
+        <!-- Testing Pyramid -->
+        <section>
+          <h2>Testing Pyramid</h2>
+          <p>
+            We follow the testing pyramid principle: many unit tests, fewer
+            integration tests, and even fewer e2e tests.
+          </p>
+          <div class="pyramid">
+            <div class="pyramid-unit">📦 Unit Tests (Many)</div>
+            <div class="pyramid-integration">🔗 Integration Tests (Some)</div>
+            <div class="pyramid-e2e">🌐 E2E Tests (Few)</div>
+          </div>
+        </section>
+
+        <!-- Tech Stack -->
+        <section>
+          <h2>Tech Stack & Tools</h2>
+
+          <h3>1. Vitest – Unit & Component Testing</h3>
+          <div class="tool-box">
+            <strong>Package:</strong> <code>vitest</code><br />
+            <strong>Purpose:</strong> Fast unit and component testing<br />
+            <strong>Coverage:</strong> Generate coverage reports<br />
+            <strong>Config:</strong> <code>vitest.config.ts</code>
+          </div>
+          <p><strong>What Vitest Tests:</strong></p>
+          <ul>
+            <li>Individual component functionality</li>
+            <li>Utility functions and hooks</li>
+            <li>Component rendering and state</li>
+            <li>Error handling and edge cases</li>
+          </ul>
+
+          <h4>Run Vitest Commands:</h4>
+          <div class="command">bun run test</div>
+          <div class="command">bun run test:ui</div>
+          <div class="command">bun run test:coverage</div>
+
+          <div class="documentation-link">
+            <a href="https://vitest.dev/" target="_blank">Vitest Official →</a>
+          </div>
+
+          <h3>2. Playwright – End-to-End Testing</h3>
+          <div class="tool-box">
+            <strong>Package:</strong> <code>@playwright/test</code><br />
+            <strong>Purpose:</strong> Cross-browser e2e testing<br />
+            <strong>Browsers:</strong> Chromium, Firefox, WebKit<br />
+            <strong>Config:</strong> <code>playwright.config.ts</code>
+          </div>
+          <p><strong>What Playwright Tests:</strong></p>
+          <ul>
+            <li>User workflows across entire app</li>
+            <li>Authentication flows</li>
+            <li>Page navigation and routing</li>
+            <li>Form submission and validation</li>
+            <li>Multi-page interactions</li>
+          </ul>
+
+          <h4>Run Playwright Commands:</h4>
+          <div class="command">bun run test:e2e</div>
+          <div class="command">
+            bun run test:e2e tests/e2e/accessibility.spec.ts
+          </div>
+          <div class="command">npx playwright test --ui</div>
+
+          <div class="documentation-link">
+            <a href="https://playwright.dev/" target="_blank"
+              >Playwright Official →</a
+            >
+          </div>
+
+          <h3>3. ESLint – Code Quality & Linting</h3>
+          <div class="tool-box">
+            <strong>Package:</strong> <code>eslint</code><br />
+            <strong>Purpose:</strong> Code quality and best practices<br />
+            <strong>Plugins:</strong> Next.js, React, TypeScript, JSX-a11y<br />
+            <strong>Config:</strong> <code>eslint.config.mjs</code>
+          </div>
+
+          <h4>Run ESLint Commands:</h4>
+          <div class="command">bun run lint</div>
+          <div class="command">bun run lint --fix</div>
+
+          <div class="documentation-link">
+            <a href="https://eslint.org/" target="_blank">ESLint Official →</a>
+          </div>
+
+          <h3>4. Axe DevTools – Accessibility Testing</h3>
+          <div class="tool-box">
+            <strong>Package:</strong> <code>@axe-core/playwright</code><br />
+            <strong>Purpose:</strong> Automated accessibility audits<br />
+            <strong>Standards:</strong> WCAG 2.1 AA compliance<br />
+            <strong>Integration:</strong> Runs within Playwright tests
+          </div>
+
+          <p>
+            See <code>accessibility-summary.html</code> for detailed a11y setup.
+          </p>
+
+          <div class="documentation-link">
+            <a href="https://www.deque.com/axe/" target="_blank"
+              >Axe DevTools →</a
+            >
+          </div>
+        </section>
+
+        <!-- Test File Structure -->
+        <section>
+          <h2>Project Test Structure</h2>
+          <pre><code>tests/
+├── e2e/
+│   ├── auth.spec.ts           # Authentication flow tests
+│   ├── notes.spec.ts          # Notes CRUD operations
+│   └── accessibility.spec.ts  # Accessibility & heading hierarchy
+└── unit/
+    └── (future: component tests)</code></pre>
+
+          <h3>Test Configuration Files:</h3>
+          <ul>
+            <li>
+              <code>vitest.config.ts</code> — Vitest unit test configuration
+            </li>
+            <li>
+              <code>playwright.config.ts</code> — Playwright e2e configuration
+            </li>
+            <li><code>eslint.config.mjs</code> — ESLint rules</li>
+          </ul>
+        </section>
+
+        <!-- Testing Workflow -->
+        <section>
+          <h2>Developer Testing Workflow</h2>
+
+          <h3>During Development</h3>
+          <ol>
+            <li>Write code in feature branch</li>
+            <li>
+              Run linter: <code>bun run lint --fix</code> to catch issues early
+            </li>
+            <li>
+              Run tests: <code>bun run test</code> to verify functionality
+            </li>
+            <li>
+              Check accessibility:
+              <code>bun run test:e2e tests/e2e/accessibility.spec.ts</code>
+            </li>
+          </ol>
+
+          <h3>Before Committing</h3>
+          <ol>
+            <li>Run full test suite: <code>bun run test</code></li>
+            <li>Run all e2e tests: <code>bun run test:e2e</code></li>
+            <li>Run linter: <code>bun run lint</code></li>
+            <li>Fix any failures before committing</li>
+          </ol>
+
+          <h3>Command Reference</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Command</th>
+                <th>Purpose</th>
+                <th>When to Use</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>bun run dev</code></td>
+                <td>Start dev server</td>
+                <td>Before running e2e tests</td>
+              </tr>
+              <tr>
+                <td><code>bun run lint</code></td>
+                <td>Run ESLint</td>
+                <td>Before every commit</td>
+              </tr>
+              <tr>
+                <td><code>bun run lint --fix</code></td>
+                <td>Auto-fix linting issues</td>
+                <td>During development</td>
+              </tr>
+              <tr>
+                <td><code>bun run test</code></td>
+                <td>Run Vitest unit tests</td>
+                <td>During development</td>
+              </tr>
+              <tr>
+                <td><code>bun run test:ui</code></td>
+                <td>Vitest with UI dashboard</td>
+                <td>Visual test debugging</td>
+              </tr>
+              <tr>
+                <td><code>bun run test:coverage</code></td>
+                <td>Generate coverage report</td>
+                <td>After test development</td>
+              </tr>
+              <tr>
+                <td><code>bun run test:e2e</code></td>
+                <td>Run all Playwright tests</td>
+                <td>Before commit/PR</td>
+              </tr>
+              <tr>
+                <td><code>bun run test:e2e --ui</code></td>
+                <td>Playwright with UI</td>
+                <td>Visual debugging</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- Writing Tests -->
+        <section>
+          <h2>Writing Tests – Guidelines</h2>
+
+          <h3>Unit Tests (Vitest)</h3>
+          <pre><code>import { describe, it, expect } from "vitest";
+
+describe("MyComponent", () => {
+  it("should render with correct text", () => {
+    // Arrange: Set up test data
+    const props = { title: "Test" };
+
+    // Act: Perform the action
+    const result = renderComponent(props);
+
+    // Assert: Verify the outcome
+    expect(result).toContain("Test");
+  });
+
+  it("should handle errors gracefully", () => {
+    expect(() => riskyFunction()).not.toThrow();
+  });
+});</code></pre>
+
+          <h3>E2E Tests (Playwright)</h3>
+          <pre><code>import { test, expect } from "@playwright/test";
+
+test.describe("Authentication", () => {
+  test("user can sign in", async ({ page }) => {
+    // Navigate to page
+    await page.goto("/authenticate");
+
+    // Fill and submit form
+    await page.fill("input[name='email']", "user@test.com");
+    await page.fill("input[name='password']", "password123");
+    await page.click("button:has-text('Sign In')");
+
+    // Assert navigation
+    await expect(page).toHaveURL(/\/dashboard/);
+  });
+});</code></pre>
+
+          <h3>Best Practices</h3>
+          <div class="comparison">
+            <div class="do">
+              <strong>✅ DO</strong>
+              • Test behavior, not implementation<br />
+              • Use descriptive test names<br />
+              • Keep tests isolated and independent<br />
+              • Use page objects for e2e<br />
+              • Test error scenarios<br />
+              • Mock external APIs
+            </div>
+            <div class="dont">
+              <strong>❌ DON'T</strong>
+              • Test implementation details<br />
+              • Create interdependent tests<br />
+              • Use hardcoded wait times<br />
+              • Test the testing framework<br />
+              • Ignore flaky tests<br />
+              • Make tests too complex
+            </div>
+          </div>
+        </section>
+
+        <!-- Test Coverage -->
+        <section>
+          <h2>Test Coverage Goals</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th>Target</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Statements Coverage</td>
+                <td>≥ 80%</td>
+                <td>🎯 In Progress</td>
+              </tr>
+              <tr>
+                <td>Branch Coverage</td>
+                <td>≥ 75%</td>
+                <td>🎯 In Progress</td>
+              </tr>
+              <tr>
+                <td>Function Coverage</td>
+                <td>≥ 80%</td>
+                <td>🎯 In Progress</td>
+              </tr>
+              <tr>
+                <td>Line Coverage</td>
+                <td>≥ 80%</td>
+                <td>🎯 In Progress</td>
+              </tr>
+              <tr>
+                <td>E2E Critical Paths</td>
+                <td>100%</td>
+                <td>✅ Complete</td>
+              </tr>
+              <tr>
+                <td>Accessibility Tests</td>
+                <td>All Pages</td>
+                <td>✅ Complete</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>Check coverage: <code>bun run test:coverage</code></p>
+        </section>
+
+        <!-- Common Test Scenarios -->
+        <section>
+          <h2>Common Test Scenarios</h2>
+
+          <h3>Testing Authenticated Routes (E2E)</h3>
+          <pre><code>async function signIn({ page }: { page: Page }) {
+  const res = await page.request.post("/api/auth/sign-in/email", {
+    data: { email: "user@test.com", password: "password123" }
+  });
+  expect(res.ok()).toBeTruthy();
+}
+
+test("authenticated user can access dashboard", async ({ page }) => {
+  await signIn({ page });
+  await page.goto("/dashboard");
+  await expect(page).toHaveURL(/\/dashboard/);
+});</code></pre>
+
+          <h3>Testing API Responses</h3>
+          <pre><code>test("API returns correct data", async ({ page }) => {
+  const response = await page.request.get("/api/notes");
+  expect(response.status()).toBe(200);
+  const data = await response.json();
+  expect(Array.isArray(data)).toBeTruthy();
+});</code></pre>
+
+          <h3>Testing Accessibility</h3>
+          <pre><code>test("page has correct heading hierarchy", async ({ page }) => {
+  await page.goto("/");
+  const headings = await page.locator("h1, h2, h3").all();
+
+  // Verify sequential hierarchy
+  for (let i = 0; i < headings.length - 1; i++) {
+    const current = await headings[i].evaluate(el => el.tagName);
+    const next = await headings[i + 1].evaluate(el => el.tagName);
+    const diff = Math.abs(parseInt(next[1]) - parseInt(current[1]));
+    expect(diff).toBeLessThanOrEqual(1);
+  }
+});</code></pre>
+        </section>
+
+        <!-- Debugging Tests -->
+        <section>
+          <h2>Debugging Tests</h2>
+
+          <h3>Debug Vitest Tests</h3>
+          <div class="command">bun run test:ui</div>
+          <p>
+            Opens interactive UI dashboard showing test results and filtering.
+          </p>
+
+          <h3>Debug Playwright Tests</h3>
+          <div class="command">npx playwright test --debug</div>
+          <p>
+            Launches Playwright Inspector with step-by-step execution control.
+          </p>
+
+          <h3>Generate Playwright Report</h3>
+          <div class="command">npx playwright show-report</div>
+          <p>
+            Displays detailed test report with videos, screenshots, and logs.
+          </p>
+
+          <h3>Common Debugging Techniques</h3>
+          <ul>
+            <li>Add <code>await page.pause()</code> to pause test execution</li>
+            <li>
+              Use <code>await page.screenshot({ path: "debug.png" })</code> to
+              capture screenshots
+            </li>
+            <li>
+              Check <code>playwright-report/</code> for HTML reports with videos
+            </li>
+            <li>
+              Use <code>console.log()</code> in tests (output visible in CLI)
+            </li>
+            <li>
+              Run single test: <code>npx playwright test auth.spec.ts</code>
+            </li>
+          </ul>
+        </section>
+
+        <!-- CI/CD Integration -->
+        <section>
+          <h2>CI/CD Integration</h2>
+
+          <p>
+            Tests should run automatically in your CI pipeline on every push and
+            PR. Suggested workflow:
+          </p>
+
+          <div class="flow">
+            1. Lint: <code>bun run lint</code><br />
+            2. Unit Tests: <code>bun run test</code><br />
+            3. Build: <code>bun run build</code><br />
+            4. E2E Tests: <code>bun run test:e2e</code><br />
+            5. Coverage Report: <code>bun run test:coverage</code>
+          </div>
+
+          <p>
+            <strong>Fail CI if:</strong> Any lint errors, test failures, or
+            coverage below targets.
+          </p>
+        </section>
+
+        <!-- Troubleshooting -->
+        <section>
+          <h2>Troubleshooting Tests</h2>
+
+          <h3>Flaky Tests (Intermittent Failures)</h3>
+          <p>
+            <strong>Problem:</strong> Tests pass sometimes, fail other times.
+          </p>
+          <p><strong>Solutions:</strong></p>
+          <ul>
+            <li>Replace timeouts with proper waitFor conditions</li>
+            <li>Use <code>await page.waitForLoadState("networkidle")</code></li>
+            <li>Avoid hardcoded delays</li>
+            <li>Check for race conditions in async code</li>
+          </ul>
+
+          <h3>Port Already in Use (E2E Tests)</h3>
+          <p>
+            <strong>Problem:</strong>
+            <code>EADDRINUSE: address already in use</code>
+          </p>
+          <p><strong>Solution:</strong> Kill existing process on port 3000:</p>
+          <div class="command">lsof -ti:3000 | xargs kill -9</div>
+
+          <h3>Playwright Tests Won't Run</h3>
+          <p><strong>Problem:</strong> Tests hang or don't start.</p>
+          <p><strong>Solutions:</strong></p>
+          <ul>
+            <li>Ensure dev server is running: <code>bun run dev</code></li>
+            <li>
+              Check Playwright is installed:
+              <code>bunx playwright install</code>
+            </li>
+            <li>
+              Clear Playwright cache: <code>rm -rf ~/.cache/ms-playwright</code>
+            </li>
+          </ul>
+
+          <h3>Import Errors in Tests</h3>
+          <p>
+            <strong>Problem:</strong> Module not found errors in test files.
+          </p>
+          <p><strong>Solution:</strong> Verify path aliases in:</p>
+          <ul>
+            <li><code>tsconfig.json</code> (path mappings)</li>
+            <li><code>vitest.config.ts</code> (alias configuration)</li>
+          </ul>
+        </section>
+
+        <!-- Resources -->
+        <section>
+          <h2>Learning Resources</h2>
+          <ul>
+            <li>
+              <a href="https://vitest.dev/guide/">Vitest Getting Started</a>
+            </li>
+            <li>
+              <a href="https://playwright.dev/docs/intro">Playwright Docs</a>
+            </li>
+            <li>
+              <a href="https://testing-library.com/docs/queries/about"
+                >Testing Library Queries</a
+              >
+            </li>
+            <li>
+              <a href="https://martinfowler.com/bliki/TestPyramid.html"
+                >Martin Fowler: Test Pyramid</a
+              >
+            </li>
+            <li>
+              <a href="https://www.deque.com/articles/automated-testing/"
+                >Deque: Automated Testing</a
+              >
+            </li>
+          </ul>
+        </section>
+      </main>
+
+      <footer>
+        <p>NextNotes Testing Documentation | May 29, 2026</p>
+        <p>
+          Config files: vitest.config.ts, playwright.config.ts,
+          eslint.config.mjs
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>

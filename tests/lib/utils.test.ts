@@ -15,7 +15,7 @@ describe("sanitizeTitle", () => {
   it("should remove angle brackets", () => {
     // sanitizeTitle removes < and > but keeps everything else
     expect(sanitizeTitle("hello<script>alert('xss')</script>")).toBe(
-      "helloscriptalert('xss')/script"
+      "helloscriptalert('xss')/script",
     );
     expect(sanitizeTitle("<b>bold</b>")).toBe("bbold/b");
   });
@@ -52,13 +52,13 @@ describe("validateContentJson", () => {
 
   it("should return default for missing type field", () => {
     expect(validateContentJson('{"content":[]}')).toBe(
-      '{"type":"doc","content":[]}'
+      '{"type":"doc","content":[]}',
     );
   });
 
   it("should return default for non-string type", () => {
     expect(validateContentJson('{"type":123,"content":[]}')).toBe(
-      '{"type":"doc","content":[]}'
+      '{"type":"doc","content":[]}',
     );
   });
 

@@ -58,7 +58,7 @@ describe("notes module", () => {
           "user1",
           "Test Note",
           '{"type":"doc","content":[]}',
-        ]
+        ],
       );
 
       expect(result).toEqual(mockNote);
@@ -156,7 +156,7 @@ describe("notes module", () => {
 
       expect(mockGet).toHaveBeenCalledWith(
         "SELECT * FROM notes WHERE id = ? AND user_id = ?",
-        ["note-123", "user1"]
+        ["note-123", "user1"],
       );
       expect(result).toEqual(mockNote);
     });
@@ -177,7 +177,7 @@ describe("notes module", () => {
       expect(result).toBeNull();
       expect(mockGet).toHaveBeenCalledWith(
         "SELECT * FROM notes WHERE id = ? AND user_id = ?",
-        ["note-123", "user2"]
+        ["note-123", "user2"],
       );
     });
   });
@@ -213,7 +213,7 @@ describe("notes module", () => {
 
       expect(mockQuery).toHaveBeenCalledWith(
         "SELECT * FROM notes WHERE user_id = ? ORDER BY updated_at DESC",
-        ["user1"]
+        ["user1"],
       );
       expect(result).toEqual(mockNotes);
     });
@@ -258,7 +258,7 @@ describe("notes module", () => {
 
       expect(mockRun).toHaveBeenCalledWith(
         "UPDATE notes SET title = ?, content_json = ?, updated_at = datetime('now') WHERE id = ? AND user_id = ?",
-        ["Updated", '{"type":"doc","content":[]}', "note-1", "user1"]
+        ["Updated", '{"type":"doc","content":[]}', "note-1", "user1"],
       );
     });
 
@@ -325,7 +325,7 @@ describe("notes module", () => {
       expect(result).toBe(true);
       expect(mockRun).toHaveBeenCalledWith(
         "DELETE FROM notes WHERE id = ? AND user_id = ?",
-        ["note-1", "user1"]
+        ["note-1", "user1"],
       );
     });
 
@@ -403,7 +403,7 @@ describe("notes module", () => {
 
       expect(mockRun).toHaveBeenCalledWith(
         "UPDATE notes SET is_public = 0, public_slug = NULL, updated_at = datetime('now') WHERE id = ? AND user_id = ?",
-        ["note-1", "user1"]
+        ["note-1", "user1"],
       );
     });
 
@@ -435,7 +435,7 @@ describe("notes module", () => {
 
       expect(mockGet).toHaveBeenCalledWith(
         "SELECT * FROM notes WHERE public_slug = ? AND is_public = 1",
-        ["slug123"]
+        ["slug123"],
       );
       expect(result).toEqual(mockNote);
     });
@@ -456,7 +456,7 @@ describe("notes module", () => {
       expect(result).toBeNull();
       expect(mockGet).toHaveBeenCalledWith(
         "SELECT * FROM notes WHERE public_slug = ? AND is_public = 1",
-        ["slug123"]
+        ["slug123"],
       );
     });
   });

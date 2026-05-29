@@ -29,7 +29,9 @@ async function signIn({ page }: { page: import("@playwright/test").Page }) {
 // ---------------------------------------------------------------------------
 
 test.describe("Dark mode", () => {
-  test("html element carries the dark class on every page", async ({ page }) => {
+  test("html element carries the dark class on every page", async ({
+    page,
+  }) => {
     await page.goto("/authenticate");
     const cls = await page.locator("html").getAttribute("class");
     expect(cls).toContain("dark");
@@ -37,8 +39,8 @@ test.describe("Dark mode", () => {
 
   test("body background is dark (not white)", async ({ page }) => {
     await page.goto("/authenticate");
-    const bg = await page.evaluate(() =>
-      window.getComputedStyle(document.body).backgroundColor
+    const bg = await page.evaluate(
+      () => window.getComputedStyle(document.body).backgroundColor,
     );
     // background is --background: #09090b → rgb(9, 9, 11) in dark mode
     expect(bg).not.toBe("rgb(255, 255, 255)");
@@ -70,10 +72,12 @@ test.describe("Unauthenticated access", () => {
     await expect(page.locator("header")).toBeVisible();
   });
 
-  test("logout button is NOT rendered when unauthenticated", async ({ page }) => {
+  test("logout button is NOT rendered when unauthenticated", async ({
+    page,
+  }) => {
     await page.goto("/authenticate");
     await expect(
-      page.getByRole("button", { name: /sign out/i })
+      page.getByRole("button", { name: /sign out/i }),
     ).not.toBeVisible();
   });
 });
@@ -85,7 +89,9 @@ test.describe("Unauthenticated access", () => {
 test.describe("Authenticated access", () => {
   test.beforeEach(signIn);
 
-  test("authenticated user can access /dashboard without redirect", async ({ page }) => {
+  test("authenticated user can access /dashboard without redirect", async ({
+    page,
+  }) => {
     await page.goto("/dashboard");
     await expect(page).toHaveURL("http://localhost:3000/dashboard");
   });
@@ -97,7 +103,9 @@ test.describe("Authenticated access", () => {
 
   test("header height is 60px", async ({ page }) => {
     await page.goto("/dashboard");
-    const height = await page.locator("header").evaluate((el) => el.clientHeight);
+    const height = await page
+      .locator("header")
+      .evaluate((el) => el.clientHeight);
     expect(height).toBe(60);
   });
 
@@ -106,7 +114,9 @@ test.describe("Authenticated access", () => {
     await expect(page.getByRole("button", { name: /sign out/i })).toBeVisible();
   });
 
-  test("logout button is on the RIGHT side of the header (after the logo)", async ({ page }) => {
+  test("logout button is on the RIGHT side of the header (after the logo)", async ({
+    page,
+  }) => {
     await page.goto("/dashboard");
 
     const logoutButton = page.getByRole("button", { name: /sign out/i });

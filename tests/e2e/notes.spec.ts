@@ -148,20 +148,24 @@ test.describe("Notes Management", () => {
     await publicPage.goto(publicUrl);
 
     // Verify content is visible and read-only
-    await expect(publicPage.locator("h1:has-text('Public Note')")).toBeDefined();
+    await expect(
+      publicPage.locator("h1:has-text('Public Note')"),
+    ).toBeDefined();
     await expect(publicPage.locator("text=Public content")).toBeDefined();
 
     // Editor should not be editable
     const editor = publicPage.locator(".ProseMirror");
     const contentEditableAttr = await editor.evaluate((el) =>
-      el.getAttribute("contenteditable")
+      el.getAttribute("contenteditable"),
     );
     expect(contentEditableAttr).toBe("false");
 
     await publicPage.close();
   });
 
-  test("should apply text formatting (bold, code, bullet list)", async ({ page }) => {
+  test("should apply text formatting (bold, code, bullet list)", async ({
+    page,
+  }) => {
     // Create a new note
     await page.goto("/notes/new");
     await page.fill('input[placeholder="Untitled note"]', "Formatting Test");
@@ -221,7 +225,7 @@ test.describe("Notes Management", () => {
     }
 
     // Click on a note
-    await page.click('text=Note 1');
+    await page.click("text=Note 1");
     await page.waitForURL(/\/notes\/[a-z0-9-]+$/);
     await expect(page.locator('input[value="Note 1"]')).toBeVisible();
   });

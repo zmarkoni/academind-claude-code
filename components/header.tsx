@@ -18,9 +18,7 @@ export function Header({ user }: HeaderProps) {
         className="mx-auto max-w-7xl w-full h-full px-4 sm:px-6 flex items-center justify-between"
       >
         {/* Left: Logout button (only when authenticated) */}
-        <div className="w-24">
-          {user && <LogoutButton />}
-        </div>
+        <div className="w-24">{user && <LogoutButton />}</div>
 
         {/* Center: Logo */}
         <Link
@@ -35,6 +33,11 @@ export function Header({ user }: HeaderProps) {
           <ThemeToggle />
         </div>
       </nav>
+      <h2 className="zoki sr-only">
+        NextNotes - Your personal note-taking app
+      </h2>
+      <h3>TEST</h3>
+      <h4>TEST</h4>
     </header>
   );
 }

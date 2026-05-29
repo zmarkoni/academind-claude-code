@@ -49,7 +49,9 @@ export function AuthForm({ isSignUp }: AuthFormProps) {
     <main className="min-h-svh flex items-center justify-center bg-background px-4">
       <section className="w-full max-w-sm rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-8 shadow-sm">
         <div className="mb-8 text-center">
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">NoteApp</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">
+            NoteApp
+          </h1>
           <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
             {isSignUp ? "Create an account" : "Sign in to your account"}
           </p>
@@ -57,7 +59,10 @@ export function AuthForm({ isSignUp }: AuthFormProps) {
 
         <form onSubmit={handleSubmit} noValidate className="space-y-4">
           <div className="space-y-1.5">
-            <label htmlFor="email" className="block text-sm font-medium text-foreground">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-foreground"
+            >
               Email
             </label>
             <input
@@ -73,7 +78,10 @@ export function AuthForm({ isSignUp }: AuthFormProps) {
           </div>
 
           <div className="space-y-1.5">
-            <label htmlFor="password" className="block text-sm font-medium text-foreground">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-foreground"
+            >
               Password
             </label>
             <input
@@ -89,7 +97,11 @@ export function AuthForm({ isSignUp }: AuthFormProps) {
           </div>
 
           {error && (
-            <p id="form-error" role="alert" className="text-sm text-red-600 dark:text-red-400">
+            <p
+              id="form-error"
+              role="alert"
+              className="text-sm text-red-600 dark:text-red-400"
+            >
               {error}
             </p>
           )}

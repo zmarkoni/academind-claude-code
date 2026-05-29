@@ -32,6 +32,7 @@ Copy `.env.example` to `.env.local` before running. Required vars:
 This is a **Next.js 16 App Router** project. All routes live under `app/` using the file-system router. The root layout (`app/layout.tsx`) wraps the entire app with Geist fonts and global CSS.
 
 **Key dependencies and their roles:**
+
 - **better-auth** — authentication (server-side, configured via env vars)
 - **TipTap** (`@tiptap/react`, `@tiptap/starter-kit`, `@tiptap/pm`) — rich text editor
 - **Zod v4** — schema validation

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import type { Note } from "@/lib/notes";
-import { updateNote, deleteNote, setNotePublic } from "./actions";
+import { updateNote, setNotePublic } from "./actions";
 import { Copy, Check } from "lucide-react";
 import { EditorToolbar } from "@/components/editor-toolbar";
 
@@ -18,7 +18,6 @@ export function NoteEditor({ note }: NoteEditorProps) {
   const router = useRouter();
   const [title, setTitle] = useState(note.title);
   const [isSaving, setIsSaving] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -55,19 +54,6 @@ export function NoteEditor({ note }: NoteEditorProps) {
       setError("Failed to save note");
     } finally {
       setIsSaving(false);
-    }
-  };
-
-  const handleDelete = async () => {
-    if (!confirm("Are you sure you want to delete this note?")) return;
-    setIsDeleting(true);
-    setError(null);
-    try {
-      await deleteNote(note.id);
-      router.push("/dashboard");
-    } catch (err) {
-      setError("Failed to delete note");
-      setIsDeleting(false);
     }
   };
 
@@ -118,13 +104,6 @@ export function NoteEditor({ note }: NoteEditorProps) {
             className="rounded-lg bg-zinc-900 dark:bg-zinc-100 px-4 py-2 text-sm font-medium text-white dark:text-zinc-900 hover:bg-zinc-700 dark:hover:bg-zinc-200 disabled:opacity-50"
           >
             {isSaving ? "Saving…" : "Save"}
-          </button>
-          <button
-            onClick={handleDelete}
-            disabled={isDeleting}
-            className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50"
-          >
-            {isDeleting ? "Deleting…" : "Delete"}
           </button>
         </div>
       </div>
@@ -196,10 +175,10 @@ export function NoteEditor({ note }: NoteEditorProps) {
 
       <div className="mt-8">
         <Link
-          href="/dashboard"
+          href={`/notes/${note.id}`}
           className="text-sm text-zinc-600 dark:text-zinc-400 hover:text-foreground"
         >
-          ← Back to notes
+          ← Back to note
         </Link>
       </div>
     </main>

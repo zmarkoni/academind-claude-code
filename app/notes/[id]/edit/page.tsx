@@ -2,9 +2,9 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect, notFound } from "next/navigation";
 import { getNoteById } from "@/lib/notes";
-import { NoteViewer } from "./note-viewer";
+import { NoteEditor } from "../note-editor";
 
-export default async function NoteViewPage({
+export default async function NoteEditorPage({
   params,
 }: {
   params: Promise<{ id: string }>;
@@ -19,5 +19,5 @@ export default async function NoteViewPage({
     notFound();
   }
 
-  return <NoteViewer note={note} />;
+  return <NoteEditor note={note} />;
 }

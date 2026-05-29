@@ -43,4 +43,5 @@ next-env.d.ts
 #playwright
 playwright-report
 
-test-resultsdata/*.db-wal
+test-results
+data/*.db-wal

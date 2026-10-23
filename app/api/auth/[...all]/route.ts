@@ -5,42 +5,57 @@ import { headers } from "next/headers";
 
 const { POST: authPost, GET: authGet } = toNextJsHandler(auth);
 
+function tooManyRequests() {
+  return new Response(JSON.stringify({ error: "Too many requests" }), {
+    status: 429,
+    headers: { "Content-Type": "application/json" },
+  });
+}
+
 // Forwarding headers are client-controlled unless a trusted reverse proxy overwrites them,
-// so they are only honoured when TRUST_PROXY=true. Otherwise all requests share one bucket.
-function getClientIp(headersList: Awaited<ReturnType<typeof headers>>): string {
+// so the client IP is only used when TRUST_PROXY=true.
+async function getClientIp(): Promise<string | null> {
   if (process.env.TRUST_PROXY !== "true") {
-    return "unknown";
+    return null;
   }
+  const headersList = await headers();
   const forwarded = headersList.get("x-forwarded-for");
   if (forwarded) {
     return forwarded.split(",")[0].trim();
   }
-  return headersList.get("x-real-ip") || "unknown";
+  return headersList.get("x-real-ip");
+}
+
+// Without a trusted proxy, credential attempts are limited per account instead of one
+// bucket shared by all clients, which would let anyone lock everybody out.
+async function getEmailKey(request: Request): Promise<string | null> {
+  try {
+    const body = await request.clone().json();
+    return typeof body?.email === "string"
+      ? `email:${body.email.trim().toLowerCase()}`
+      : null;
+  } catch {
+    return null;
+  }
 }
 
 export async function POST(request: Request) {
-  const headersList = await headers();
-  const clientIp = getClientIp(headersList);
+  const key = (await getClientIp()) ?? (await getEmailKey(request));
 
-  if (!checkRateLimit(clientIp)) {
-    return new Response(JSON.stringify({ error: "Too many requests" }), {
-      status: 429,
-      headers: { "Content-Type": "application/json" },
-    });
+  if (key && !checkRateLimit(key)) {
+    return tooManyRequests();
   }
 
   return authPost(request);
 }
 
 export async function GET(request: Request) {
-  const headersList = await headers();
-  const clientIp = getClientIp(headersList);
+  // GET carries no credentials (session lookups, callbacks), so it is only limited per IP
+  // behind a trusted proxy.
+  const key = await getClientIp();
 
-  if (!checkRateLimit(clientIp)) {
-    return new Response(JSON.stringify({ error: "Too many requests" }), {
-      status: 429,
-      headers: { "Content-Type": "application/json" },
-    });
+  if (key && !checkRateLimit(key)) {
+    return tooManyRequests();
   }
 
   return authGet(request);

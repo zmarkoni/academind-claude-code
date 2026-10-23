@@ -5,7 +5,12 @@ import { headers } from "next/headers";
 
 const { POST: authPost, GET: authGet } = toNextJsHandler(auth);
 
+// Forwarding headers are client-controlled unless a trusted reverse proxy overwrites them,
+// so they are only honoured when TRUST_PROXY=true. Otherwise all requests share one bucket.
 function getClientIp(headersList: Awaited<ReturnType<typeof headers>>): string {
+  if (process.env.TRUST_PROXY !== "true") {
+    return "unknown";
+  }
   const forwarded = headersList.get("x-forwarded-for");
   if (forwarded) {
     return forwarded.split(",")[0].trim();

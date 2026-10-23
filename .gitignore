@@ -44,4 +44,12 @@ next-env.d.ts
 playwright-report
 
 test-results
+
+# local SQLite database and runtime logs
+data/*.db
+data/*.db-shm
 data/*.db-wal
+dev.log
+
+# per-user Claude Code settings
+.claude/settings.local.json

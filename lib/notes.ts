@@ -1,6 +1,10 @@
 import { query, get, run } from "@/lib/db";
 import { randomUUID } from "crypto";
-import { sanitizeTitle, validateContentJson } from "@/lib/utils";
+import {
+  generatePublicSlug,
+  sanitizeTitle,
+  validateContentJson,
+} from "@/lib/utils";
 
 export type Note = {
   id: string;
@@ -88,7 +92,7 @@ export function setNotePublic(
   if (!note) return null;
 
   if (isPublic && !note.public_slug) {
-    const slug = randomUUID().split("-")[0];
+    const slug = generatePublicSlug();
     run(
       "UPDATE notes SET is_public = 1, public_slug = ?, updated_at = datetime('now') WHERE id = ? AND user_id = ?",
       [slug, noteId, userId],

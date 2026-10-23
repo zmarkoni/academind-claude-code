@@ -125,7 +125,11 @@ describe("generatePublicSlug", () => {
 
   it("should generate URL-safe slugs", () => {
     const slug = generatePublicSlug();
-    expect(/^[A-Z0-9]+$/.test(slug)).toBe(true);
+    expect(/^[A-Za-z0-9_-]+$/.test(slug)).toBe(true);
+  });
+
+  it("should carry 128 bits of entropy (22 base64url chars)", () => {
+    expect(generatePublicSlug()).toHaveLength(22);
   });
 
   it("should generate different slugs on each call", () => {

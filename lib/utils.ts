@@ -1,4 +1,5 @@
 // Validation and utility functions extracted for easier testing
+import { randomBytes } from "crypto";
 
 export function sanitizeTitle(title: string): string {
   return title.trim().slice(0, 255).replace(/[<>]/g, "");
@@ -26,6 +27,6 @@ export function isValidPassword(password: string): boolean {
 }
 
 export function generatePublicSlug(): string {
-  // Generate a short, URL-safe slug from a random string
-  return Math.random().toString(36).substring(2, 10).toUpperCase();
+  // 128 bits from a CSPRNG, base64url-encoded (22 chars) so public links cannot be guessed
+  return randomBytes(16).toString("base64url");
 }
